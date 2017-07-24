@@ -21,6 +21,7 @@ class Map():
 		self.y = size[1]
 		self.grid = [[0 for y in range(self.x)] for x in range(self.y)]
 		self.grid[0][0] = Room()
+		self.grid[0][1] = Room()
 	
 	def display_map(self):
 		for i in self.grid:

@@ -9,7 +9,9 @@ class Game():
 
 	def run(self):
 		while True:
-			action = raw_input("Action: ")
+			action = raw_input("Action: ").rstrip().lower()
+			if action == "stop":
+				break
 			self.update(action)
 
 	def update(self, action):
