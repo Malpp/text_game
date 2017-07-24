@@ -1,3 +1,4 @@
+# pylint: disable=W0312,W0403
 from game.game import Game
 
 game = Game()

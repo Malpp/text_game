@@ -1,10 +1,12 @@
+# pylint: disable=W0312,W0403
 from map import Map
 from player import Player
 
-class Game():
+
+class Game(object):
 	def __init__(self):
 		self.map = Map("small")
-		self.player = Player(0,0)
+		self.player = Player(0, 0)
 		self.text_handler = ""
 
 	def run(self):

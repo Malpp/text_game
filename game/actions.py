@@ -1,3 +1,4 @@
+# pylint: disable=W0312,W0403
 class Action(object):
 	def __init__(self, name, actions, help_text):
 		self.help_text = help_text
@@ -16,6 +17,11 @@ class Action(object):
 		else:
 			return self.actions.index(sub_action_input)
 
+
 class Move(Action):
 	def __init__(self):
-		super(Move, self).__init__("move", ["north", "east", "south", "west"], "You can move North, East, South or West using 'move direction'")
+		super(Move, self).__init__(
+			"move",
+			["north", "east", "south", "west"],
+			"You can move North, East, South or West using 'move direction'"
+		)
