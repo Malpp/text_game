@@ -5,7 +5,7 @@ from player import Player
 
 class Game(object):
 	def __init__(self):
-		self.map = Map("small")
+		self.map = Map("default")
 		self.player = Player(0, 0)
 		self.text_handler = ""
 

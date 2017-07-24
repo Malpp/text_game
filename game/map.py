@@ -27,9 +27,15 @@ class Map():
 		]
 		self.grid[0][0] = room.Room()
 		self.grid[0][1] = room.Room()
-	
+
 	def display_map(self):
 		for i in self.grid:
 			for j in i:
 				print j,
 			print ""
+
+	def get_room(self, x, y):
+		if x < 0 or y < 0 or x >= self.size_x or y >= self.size_y:
+			return room.Empty()
+		else:
+			return self.grid[y][x]

@@ -8,15 +8,6 @@ class MapObject(object):
 		self.width = width
 		self.height = height
 
-	def is_accessible(self):
-		return self.accessible
-
-	def get_height(self):
-		return self.height
-
-	def get_width(self):
-		return self.width
-
 	def get_dimensions(self):
 		return "{}x{}".format(self.width, self.height)
 

@@ -20,19 +20,33 @@ class Player():
 			action_option = split_text[1].lower()
 			if main_action in self.actions:
 				self.actions[main_action][1](
-					self.actions[main_action][0].parse_action(action_option)
+					self.actions[main_action][0].parse_action(action_option),
+					map_obj
 				)
 			else:
 				print "No actions"
 
-	def handle_move(self, direction):
+	def handle_move(self, direction, map_obj):
+		new_x = self.x
+		new_y = self.y
+
 		if direction == -1:
-			print "Failed to move"
+			print "Invalid direction"
 		elif direction == 0:
-			print "Moved north"
+			new_y -= 1
 		elif direction == 1:
-			print "Moved east"
+			new_x += 1
 		elif direction == 2:
-			print "Moved south"
+			new_y += 1
 		elif direction == 3:
-			print "Moved west"
+			new_x -= 1
+
+		room = map_obj.get_room(new_x, new_y)
+
+		if room.accessible:
+			self.x = new_x
+			self.y = new_y
+			print "Moved into {}".format(room)
+		else:
+			print "You can't move there"
+
