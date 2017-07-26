@@ -3,50 +3,51 @@ import actions
 
 
 class Player():
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
-		self.actions = {
-			"move": [actions.Move(), self.handle_move]
-		}
 
-	def update(self, map_obj, action_text):
-		split_text = action_text.strip().split(" ")
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.actions = {
+            "move": [actions.Move(), self.handle_move]
+        }
 
-		if len(split_text) != 2:
-			print "Invalid input"
-		else:
-			main_action = split_text[0].lower()
-			action_option = split_text[1].lower()
-			if main_action in self.actions:
-				self.actions[main_action][1](
-					self.actions[main_action][0].parse_action(action_option),
-					map_obj
-				)
-			else:
-				print "No actions"
+    def update(self, map_obj, action_text):
+        split_text = action_text.strip().split(" ")
 
-	def handle_move(self, direction, map_obj):
-		new_x = self.x
-		new_y = self.y
+        if len(split_text) != 2:
+            print "Invalid input"
+        else:
+            main_action = split_text[0].lower()
+            action_option = split_text[1].lower()
+            if main_action in self.actions:
+                self.actions[main_action][1](
+                    self.actions[main_action][
+                        0].parse_action(action_option),
+                    map_obj
+                )
+            else:
+                print "No actions"
 
-		if direction == -1:
-			print "Invalid direction"
-		elif direction == 0:
-			new_y -= 1
-		elif direction == 1:
-			new_x += 1
-		elif direction == 2:
-			new_y += 1
-		elif direction == 3:
-			new_x -= 1
+    def handle_move(self, direction, map_obj):
+        new_x = self.x
+        new_y = self.y
 
-		room = map_obj.get_room(new_x, new_y)
+        if direction == -1:
+            print "Invalid direction"
+        elif direction == 0:
+            new_y -= 1
+        elif direction == 1:
+            new_x += 1
+        elif direction == 2:
+            new_y += 1
+        elif direction == 3:
+            new_x -= 1
 
-		if room.accessible:
-			self.x = new_x
-			self.y = new_y
-			print "Moved into {}".format(room)
-		else:
-			print "You can't move there"
+        room = map_obj.get_room(new_x, new_y)
 
+        if room.accessible:
+            self.x = new_x
+            self.y = new_y
+            print "Moved into {}".format(room)
+        else:
+            print "You can't move there"
