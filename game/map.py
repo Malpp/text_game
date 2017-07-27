@@ -30,8 +30,11 @@ class Map():
             ] for x in range(self.size_y)
         ]
         self.grid[0][0] = room.Room()
-
+        self.grid[self.size_y - 1][self.size_x - 1] = room.Room()
+        self.rooms = [(0, 0)]
         self.generate_rooms()
+        self.rooms.append((self.size_x - 1, self.size_y - 1))
+        self.generate_hallways()
 
     def display_map(self):
         for i in self.grid:
@@ -53,4 +56,40 @@ class Map():
             y = randint(0, self.size_y - 1)
             if str(self.grid[y][x]) == str(room.Empty()):
                 self.grid[y][x] = room.Room()
+                self.rooms.append((x, y))
                 remaining -= 1
+
+    def add_x_hallways(self, start, end, y, is_negative):
+        mod = -1 if is_negative else 1
+        for i in range(abs(end - start)):
+            tile = self.grid[y][start + i * mod]
+            if tile == room.Empty():
+                self.grid[y][start + i * mod] = room.Hallway()
+
+    def add_y_hallways(self, start, end, x, is_negative):
+        mod = -1 if is_negative else 1
+        for i in range(abs(end - start)):
+            tile = self.grid[start + i * mod][x]
+            if tile == room.Empty():
+                self.grid[start + i * mod][x] = room.Hallway()
+
+    def add_hallways(self, start_x, start_y, end_x, end_y):
+        is_x_negative = (end_x - start_x < 0)
+        is_y_negative = (end_y - start_y < 0)
+        x_or_y_first = randint(1, 2)
+        if x_or_y_first == 1:
+            
+        else:
+            pass
+            
+    def generate_hallways(self):
+        for room in range(len(self.rooms) - 1):
+            from_room = self.rooms[room]
+            to_room = self.rooms[room + 1]
+
+            # Should start going x or y
+            x_distance = to_room[0] - from_room[1]
+            y_distance = to_room[1] - from_room[1]
+
+            if x_distance < y_distance:
+                

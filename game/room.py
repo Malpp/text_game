@@ -15,16 +15,16 @@ class MapObject(object):
 class Room(MapObject):
 
     def __init__(self):
-        super(Room, self).__init__("Room", True)
+        super(Room, self).__init__("R", True)
 
 
 class Empty(MapObject):
 
     def __init__(self):
-        super(Empty, self).__init__("Empty")
+        super(Empty, self).__init__("E")
 
 
 class Hallway(MapObject):
 
     def __init__(self):
-        super(Hallway, self).__init__("Hallway", True)
+        super(Hallway, self).__init__("H", True)
