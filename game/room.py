@@ -4,31 +4,27 @@ from random import randint
 
 class MapObject(object):
 
-    def __init__(self, height, width, accessible=False):
+    def __init__(self, name, accessible=False):
         self.accessible = accessible
-        self.width = width
-        self.height = height
-
-    def get_dimensions(self):
-        return "{}x{}".format(self.width, self.height)
+        self.name = name
 
     def __str__(self):
-        return self.get_dimensions()
+        return self.name
 
 
 class Room(MapObject):
-    min_size = 3
-    max_size = 6
 
     def __init__(self):
-        super(Room, self).__init__(
-            randint(self.min_size, self.max_size),
-            randint(self.min_size, self.max_size),
-            True
-        )
+        super(Room, self).__init__("Room", True)
 
 
 class Empty(MapObject):
 
     def __init__(self):
-        super(Empty, self).__init__(0, 0)
+        super(Empty, self).__init__("Empty")
+
+
+class Hallway(MapObject):
+
+    def __init__(self):
+        super(Hallway, self).__init__("Hallway", True)

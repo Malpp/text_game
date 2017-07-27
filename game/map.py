@@ -30,7 +30,8 @@ class Map():
             ] for x in range(self.size_y)
         ]
         self.grid[0][0] = room.Room()
-        self.grid[0][1] = room.Room()
+
+        self.generate_rooms()
 
     def display_map(self):
         for i in self.grid:
@@ -43,3 +44,13 @@ class Map():
             return room.Empty()
         else:
             return self.grid[y][x]
+
+    def generate_rooms(self):
+        remaining = int(self.size_x * self.size_y * 0.1)
+
+        while remaining > 0:
+            x = randint(0, self.size_x - 1)
+            y = randint(0, self.size_y - 1)
+            if str(self.grid[y][x]) == str(room.Empty()):
+                self.grid[y][x] = room.Room()
+                remaining -= 1
