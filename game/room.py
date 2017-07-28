@@ -21,7 +21,7 @@ class Room(MapObject):
 class Empty(MapObject):
 
     def __init__(self):
-        super(Empty, self).__init__("E")
+        super(Empty, self).__init__(" ")
 
 
 class Hallway(MapObject):
