@@ -1,0 +1,11 @@
+{
+	"name": "Coveo text game",
+	"description": "A slack text based game powered by Coveo",
+	"repository": "https://github.com/Malpp/text_game",
+	"logo": "",
+	"keywords": [
+		"coveo",
+		"slack",
+		"bot"
+	]
+}
