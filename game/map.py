@@ -18,7 +18,7 @@ class Map_Sizes():
             return (10, 8)
 
 
-class Map():
+class Map(object):
 
     def __init__(self, size_string):
         size = Map_Sizes.get_size(size_string)
@@ -83,15 +83,11 @@ class Map():
         else:
             self.add_y_hallways(start_y, end_y, start_x, is_y_negative)
             self.add_x_hallways(start_x, end_x, end_y, is_x_negative)
-            
+
     def generate_hallways(self):
         for room in range(len(self.rooms) - 1):
             from_room = self.rooms[room]
             to_room = self.rooms[room + 1]
 
-            # Should start going x or y
-            x_distance = to_room[0] - from_room[1]
-            y_distance = to_room[1] - from_room[1]
-
-            self.add_hallways(from_room[0], from_room[1], to_room[0], to_room[1])
-                
+            self.add_hallways(
+                from_room[0], from_room[1], to_room[0], to_room[1])

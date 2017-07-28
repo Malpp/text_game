@@ -28,11 +28,12 @@ class Move(Action):
             "You can move North, East, South or West using 'move direction'"
         )
 
+
 class Spawn(Action):
 
     def __init__(self):
         super(Spawn, self).__init__(
             "spawn",
-            ["monster"],
+            ["monster", "map"],
             "Test function"
         )

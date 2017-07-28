@@ -1,5 +1,4 @@
 # pylint: disable=W0312,W0403
-from random import randint
 
 
 class MapObject(object):
