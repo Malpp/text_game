@@ -19,26 +19,25 @@ class Player(object):
         split_text = action_text.strip().split(" ")
 
         if len(split_text) != 2:
-            print "Invalid input"
+            return "Invalid input"
         else:
             main_action = split_text[0].lower()
             action_option = split_text[1].lower()
             if main_action in self.actions:
-                self.actions[main_action][1](
+                return self.actions[main_action][1](
                     self.actions[main_action][
                         0].parse_action(action_option),
                     map_obj
                 )
             else:
-                print "No actions"
+                return "No actions"
 
     def handle_move(self, direction, map_obj):
         new_x = self.x
         new_y = self.y
 
         if direction == -1:
-            print "Invalid direction"
-            return
+            return "Invalid direction"
         elif direction == 0:
             new_y -= 1
         elif direction == 1:
@@ -53,9 +52,9 @@ class Player(object):
         if room.accessible:
             self.x = new_x
             self.y = new_y
-            print "Moved into {}".format(room)
+            return "Moved into {}".format(room)
         else:
-            print "You can't move there"
+            return "You can't move there"
 
     def handle_spawn(self, result, map_obj):
         if result == 0:

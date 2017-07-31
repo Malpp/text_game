@@ -2,6 +2,7 @@ import os
 import time
 from slackclient import SlackClient
 import json
+from game.game import Game
 
 
 # starterbot's ID as an environment variable
@@ -9,24 +10,30 @@ BOT_ID = os.environ.get("BOT_ID")
 
 # constants
 AT_BOT = "<@" + BOT_ID + ">"
-EXAMPLE_COMMAND = "do"
+
+games = {}
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 
 
-def handle_command(command, channel):
+def handle_command(command, channel, user):
     """
         Receives commands directed at the bot and determines if they
         are valid commands. If so, then acts on the commands. If not,
         returns back what it needs for clarification.
     """
-    response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
-               "* command with numbers, delimited by spaces."
-    if command.startswith(EXAMPLE_COMMAND):
-        response = "Sure...write some more code then I can do that!"
-    slack_client.api_call("chat.postMessage", channel=channel,
-                          text=response, as_user=True)
+
+    if command.startswith('start game'):
+        games[user] = Game()
+        send_message("Game start! Type in `end game` to stop.", channel)
+    elif command.startswith('end game'):
+        games.pop(user, None)
+        send_message("Game stopped. You can now start a new one.", channel)
+    elif user in games:
+        send_message(games[user].update(command), channel)
+    else:
+        send_message("Please user the command `start game` to play", channel)
 
 
 def parse_slack_output(slack_rtm_output):
@@ -38,26 +45,36 @@ def parse_slack_output(slack_rtm_output):
     output_list = slack_rtm_output
     if output_list and len(output_list) > 0:
         for output in output_list:
-            if output and 'text' in output and output['user'] != BOT_ID:
-                slack_client.api_call(
-                    "chat.postMessage", channel=output['channel'],
-                    text=json.dumps(output), as_user=True)
+            if output and 'user' in output and output['user'] != BOT_ID:
+                # if output and 'text' in output:
+                    # send_message(json.dumps(output), output['channel'])
 
-            if output and 'text' in output and AT_BOT in output['text']:
-                # return text after the @ mention, whitespace removed
-                return output['text'].split(AT_BOT)[1].strip().lower(), \
-                    output['channel']
-    return None, None
+                if output and 'text' in output and AT_BOT in output['text'] and output['channel'].startswith('C'):
+                    # return text after the @ mention, whitespace removed
+                    send_message(
+                        'Please message me directly to play', output['channel'])
+
+                if output and 'text' in output and output['channel'].startswith('D'):
+                    return output['text'].strip().lower(), \
+                        output['channel'], output['user']
+    return None, None, None
+
+
+def send_message(message, channel):
+    slack_client.api_call(
+        "chat.postMessage", channel=channel,
+        text=message, as_user=True)
 
 
 if __name__ == "__main__":
-    READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
+    READ_WEBSOCKET_DELAY = 0.1  # 1 second delay between reading from firehose
     if slack_client.rtm_connect():
         print("StarterBot connected and running!")
         while True:
-            command, channel = parse_slack_output(slack_client.rtm_read())
+            command, channel, user = parse_slack_output(
+                slack_client.rtm_read())
             if command and channel:
-                handle_command(command, channel)
+                handle_command(command, channel, user)
             time.sleep(READ_WEBSOCKET_DELAY)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")

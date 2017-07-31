@@ -17,4 +17,4 @@ class Game(object):
             self.update(action)
 
     def update(self, action):
-        self.player.update(self.map, action)
+        return self.player.update(self.map, action)
