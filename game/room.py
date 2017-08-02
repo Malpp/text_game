@@ -28,7 +28,7 @@ class MapObject(object):
 class Room(MapObject):
 
     def __init__(self, should_spawn = True):
-        super(Room, self).__init__("Room", 10, 15, True)
+        super(Room, self).__init__("Room", 20, 40, True)
         if should_spawn:
             roll = randint(1,100)
             if roll < self.chance_monster:
@@ -44,4 +44,4 @@ class Empty(MapObject):
 class Hallway(MapObject):
 
     def __init__(self):
-        super(Hallway, self).__init__("Hallway", 5, 5, True)
+        super(Hallway, self).__init__("Hallway", 10, 5, True)

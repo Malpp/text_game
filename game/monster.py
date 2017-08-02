@@ -8,7 +8,7 @@ class Monster(object):
         self.name = monster_json['Title']
         self.armor_class = monster_json['raw']['ac']
         self.is_dead = False
-        self.hp = monster_json['raw']['hp'].split(' ')[0]
+        self.hp = int(monster_json['raw']['hp'].split(' ')[0])
         self.saw_player = False
 
     def take_damage(self, damage):

@@ -40,19 +40,22 @@ class Map(object):
         current_room = self.grid[player.y][player.x]
         to_return = ""
         if current_room.monster is not None:
-            if current_room.monster.saw_player == False:
-                current_room.monster.saw_player = True
-                to_return += "There is a {} here! Prepare for combat!".format(current_room.monster.name)
-            else:
-                monster_damage = current_room.monster.roll_attack(player.armor.armor_class)
-                player.take_damage(monster_damage)
-                if player.is_dead:
-                    to_return += "You have taken {} damage and died \n".format(monster_damage)
+            if not current_room.monster.is_dead:
+                if current_room.monster.saw_player == False:
+                    current_room.monster.saw_player = True
+                    to_return += "There is a {} here! Prepare for combat!".format(current_room.monster.name)
                 else:
-                    if monster_damage == 0:
-                        to_return += "The monster missed his attack! \n"
+                    monster_damage = current_room.monster.roll_attack(player.armor.armor_class)
+                    player.take_damage(monster_damage)
+                    if player.is_dead:
+                        to_return += "You have taken {} damage and died \n".format(monster_damage)
                     else:
-                        to_return += "You have taken {} damage \n".format(monster_damage)
+                        if monster_damage == 0:
+                            to_return += "The monster missed his attack! \n"
+                        else:
+                            to_return += "You have taken {} damage \n".format(monster_damage)
+            else:
+                to_return += "There is a dead {} here".format(current_room.monster.name)
         
         if current_room.loot is not None:
             if current_room.saw_loot == False:
