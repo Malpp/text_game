@@ -36,6 +36,31 @@ class Map(object):
         self.rooms.append((self.size_x - 1, self.size_y - 1))
         self.generate_hallways()
 
+    def update(self, player):
+        current_room = self.grid[player.y][player.x]
+        to_return = ""
+        if current_room.monster is not None:
+            if current_room.monster.saw_player == False:
+                current_room.monster.saw_player = True
+                to_return += "There is a {} here! Prepare for combat!".format(current_room.monster.name)
+            else:
+                monster_damage = current_room.monster.roll_attack(player.armor.armor_class)
+                player.take_damage(monster_damage)
+                if player.is_dead:
+                    to_return += "You have taken {} damage and died \n".format(monster_damage)
+                else:
+                    if monster_damage == 0:
+                        to_return += "The monster missed his attack! \n"
+                    else:
+                        to_return += "You have taken {} damage \n".format(monster_damage)
+        
+        if current_room.loot is not None:
+            if current_room.saw_loot == False:
+                current_room.saw_loot = True
+                to_return += "There seems to be an item in this room \n"
+
+        return to_return
+
     def display_map(self):
         for i in self.grid:
             for j in i:
