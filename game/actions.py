@@ -6,9 +6,6 @@ class Action(object):
         self.actions = actions
         self.name = name
 
-    def get_help(self):
-        return self.help_text
-
     def is_action(self, action_input):
         return action_input.split(" ")[0].lower() == self.name.lower()
 
@@ -24,16 +21,46 @@ class Move(Action):
     def __init__(self):
         super(Move, self).__init__(
             "move",
-            ["north", "east", "south", "west"],
-            "You can move North, East, South or West using 'move direction'"
+            ["north", "east", "south", "west", "options"],
+            "You can move North, East, South or West using `move command`"
         )
 
 
-class Spawn(Action):
+class Help(Action):
 
     def __init__(self):
-        super(Spawn, self).__init__(
-            "spawn",
-            ["monster", "map"],
-            "Test function"
+        super(Help, self).__init__(
+            "help",
+            [],
+            "The help function. Use `help command` to learn more about a command"
+        )
+
+
+class Attack(Action):
+
+    def __init__(self):
+        super(Attack, self).__init__(
+            "attack",
+            ["monster"],
+            "Attack a monster. Use `attack monster`"
+        )
+
+
+class Loot(Action):
+
+    def __init__(self):
+        super(Loot, self).__init__(
+            "loot",
+            ["room"],
+            "Loot a room. Use `loot room`"
+        )
+
+
+class Examine(Action):
+
+    def __init__(self):
+        super(Examine, self).__init__(
+            "examine",
+            ["room", "weapon", "armor", "loot"],
+            "Examine an item. See full list of things to examine using `help examine`"
         )

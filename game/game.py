@@ -17,4 +17,12 @@ class Game(object):
             self.update(action)
 
     def update(self, action):
-        self.player.update(self.map, action)
+        to_return = ""
+        if self.player.is_dead:
+            to_return += "You are dead"
+        elif self.player.won:
+            to_return += "You won!"
+        else:
+            to_return += self.player.update(self.map, action) + "\n"
+            to_return += self.map.update(self.player)
+        return to_return
