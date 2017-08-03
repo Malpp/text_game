@@ -1,6 +1,7 @@
 # pylint: disable=W0312,W0403
 import room
 from random import randint
+import monster
 
 
 class Map_Sizes():
@@ -29,8 +30,10 @@ class Map(object):
                 room.Empty() for y in range(self.size_x)
             ] for x in range(self.size_y)
         ]
-        self.grid[0][0] = room.Room()
-        self.grid[self.size_y - 1][self.size_x - 1] = room.Room()
+        self.grid[0][0] = room.Room(False)
+        self.grid[self.size_y - 1][self.size_x - 1] = room.BossRoom()
+        self.grid[self.size_y - 1][
+            self.size_x - 1].monster = monster.BossMonster()
         self.rooms = [(0, 0)]
         self.generate_rooms()
         self.rooms.append((self.size_x - 1, self.size_y - 1))
@@ -41,24 +44,36 @@ class Map(object):
         to_return = ""
         if current_room.monster is not None:
             if not current_room.monster.is_dead:
-                if current_room.monster.saw_player == False:
+                if current_room.monster.saw_player is False:
                     current_room.monster.saw_player = True
-                    to_return += "There is a {} here! Prepare for combat!".format(current_room.monster.name)
+                    to_return += "There is a {} here! Prepare for combat! \n".format(
+                        current_room.monster.name)
                 else:
-                    monster_damage = current_room.monster.roll_attack(player.armor.armor_class)
+                    monster_damage = current_room.monster.roll_attack(
+                        player.armor.armor_class)
                     player.take_damage(monster_damage)
                     if player.is_dead:
-                        to_return += "You have taken {} damage and died \n".format(monster_damage)
+                        to_return += "You have taken {} damage and died \n".format(
+                            monster_damage)
                     else:
                         if monster_damage == 0:
                             to_return += "The monster missed his attack! \n"
                         else:
-                            to_return += "You have taken {} damage \n".format(monster_damage)
+                            to_return += "You have taken {} damage \n".format(
+                                monster_damage)
+                            to_return += "You now have {} hp left \n".format(
+                                player.hp)
             else:
-                to_return += "There is a dead {} here".format(current_room.monster.name)
-        
+                if current_room.monster.is_boss:
+                    player.won = True
+                    to_return += "You killed the {}, you won!".format(
+                        current_room.monster.name)
+                else:
+                    to_return += "There is a dead {} here".format(
+                        current_room.monster.name)
+
         if current_room.loot is not None:
-            if current_room.saw_loot == False:
+            if current_room.saw_loot is False:
                 current_room.saw_loot = True
                 to_return += "There seems to be an item in this room \n"
 

@@ -21,12 +21,13 @@ class Move(Action):
     def __init__(self):
         super(Move, self).__init__(
             "move",
-            ["north", "east", "south", "west"],
+            ["north", "east", "south", "west", "options"],
             "You can move North, East, South or West using `move command`"
         )
 
 
 class Help(Action):
+
     def __init__(self):
         super(Help, self).__init__(
             "help",
@@ -36,6 +37,7 @@ class Help(Action):
 
 
 class Attack(Action):
+
     def __init__(self):
         super(Attack, self).__init__(
             "attack",
@@ -45,9 +47,20 @@ class Attack(Action):
 
 
 class Loot(Action):
+
     def __init__(self):
         super(Loot, self).__init__(
             "loot",
             ["room"],
             "Loot a room. Use `loot room`"
+        )
+
+
+class Examine(Action):
+
+    def __init__(self):
+        super(Examine, self).__init__(
+            "examine",
+            ["room", "weapon", "armor", "loot"],
+            "Examine an item. See full list of things to examine using `help examine`"
         )

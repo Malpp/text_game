@@ -25,8 +25,15 @@ def handle_command(command, channel, user):
     """
 
     if command.startswith('start game'):
+        print "{} started a game".format(user)
+        send_message("Generating map...", channel)
         games[user] = Game()
-        send_message("Game start! Type in `end game` to stop.", channel)
+        send_message("Game started! Type `end game` to stop. Don't forget to use the `help` command!", channel)
+        send_message("You wake up in a stone dungeon. It seems like you were "
+                     + "chained to the wall but something or someone broke you"
+                     + " break from it. Although you don't remember much about"
+                     + " how you got hear, you do remember one thing: "
+                     + "You need to escape the *Coveo Lab*", channel)
     elif command.startswith('end game'):
         games.pop(user, None)
         send_message("Game stopped. You can now start a new one.", channel)
@@ -68,8 +75,9 @@ def send_message(message, channel):
 
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 0.1  # 1 second delay between reading from firehose
+    print "Connecting..."
     if slack_client.rtm_connect():
-        print("StarterBot connected and running!")
+        print "StarterBot connected and running!"
         while True:
             command, channel, user = parse_slack_output(
                 slack_client.rtm_read())
@@ -77,4 +85,4 @@ if __name__ == "__main__":
                 handle_command(command, channel, user)
             time.sleep(READ_WEBSOCKET_DELAY)
     else:
-        print("Connection failed. Invalid Slack token or bot ID?")
+        print "Connection failed. Invalid Slack token or bot ID?"

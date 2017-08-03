@@ -1,6 +1,8 @@
 from random import randint
 
+
 class Weapon(object):
+
     def __init__(self, name, damage, to_hit, description):
         self.name = name
         self.damage = damage
@@ -8,14 +10,15 @@ class Weapon(object):
         self.description = description
 
     def roll_hit(self):
-        roll = randint(1,20)
-        if roll > self.to_hit:
+        roll = randint(1, 20)
+        if roll < self.to_hit:
             return randint(1, self.damage)
         else:
             return 0
 
 
 class Dagger(Weapon):
+
     def __init__(self):
         super(Dagger, self).__init__(
             "dagger",
@@ -26,6 +29,7 @@ class Dagger(Weapon):
 
 
 class Axe(Weapon):
+
     def __init__(self):
         super(Axe, self).__init__(
             "axe",
@@ -36,8 +40,9 @@ class Axe(Weapon):
 
 
 class Sword(Weapon):
+
     def __init__(self):
-        super(SwordAxe, self).__init__(
+        super(Sword, self).__init__(
             "sword",
             5,
             15,

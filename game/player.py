@@ -14,13 +14,16 @@ class Player(object):
         self.actions = {
             "help": [actions.Help(), self.handle_help],
             "move": [actions.Move(), self.handle_move],
-            "attack": [actions.Attack(), self.handle_attack]
+            "attack": [actions.Attack(), self.handle_attack],
+            "loot": [actions.Loot(), self.handle_loot],
+            "examine": [actions.Examine(), self.handle_examine]
         }
         self.generator = generation.Generator()
         self.armor = armor.Cloth()
         self.weapon = weapon.Dagger()
-        self.hp = 10
+        self.hp = 15
         self.is_dead = False
+        self.won = False
 
     def take_damage(self, damage):
         self.hp -= damage
@@ -30,9 +33,6 @@ class Player(object):
     def update(self, map_obj, action_text):
         split_text = action_text.strip().split(" ")
 
-        if self.is_dead:
-            return "You are dead"
-
         if len(split_text) == 1:
             split_text.append("")
 
@@ -40,7 +40,7 @@ class Player(object):
         action_option = split_text[1].lower()
         if main_action in self.actions:
             return self.actions[main_action][1](
-                    self.actions[main_action][
+                self.actions[main_action][
                     0].parse_action(action_option),
                 action_option,
                 map_obj
@@ -56,8 +56,11 @@ class Player(object):
         new_x = self.x
         new_y = self.y
 
+        if direction == 4:
+            return "You can move: " + self.get_move_options(self.x, self.y, map_obj)
+
         if direction == -1:
-            return "Invalid direction"
+            return "Invalid move command. User `help move` to get commands."
         elif direction == 0:
             new_y -= 1
         elif direction == 1:
@@ -72,9 +75,26 @@ class Player(object):
         if room.accessible:
             self.x = new_x
             self.y = new_y
-            return "Moved into {}".format(room)
+            to_return = "Moved into a {}\nYou can move: ".format(room)
+            to_return += self.get_move_options(self.x, self.y, map_obj)
+            return to_return
         else:
             return "You can't move there"
+
+    def get_move_options(self, x, y, map_obj):
+        directions = []
+        if map_obj.get_room(x - 1, y).accessible:
+            directions.append("west")
+
+        if map_obj.get_room(x + 1, y).accessible:
+            directions.append("east")
+
+        if map_obj.get_room(x, y - 1).accessible:
+            directions.append("north")
+
+        if map_obj.get_room(x, y + 1).accessible:
+            directions.append("south")
+        return ", ".join(directions)
 
     def handle_help(self, result, command, map_obj):
         to_return = ""
@@ -98,7 +118,8 @@ class Player(object):
                     return "You missed your attack"
                 else:
                     to_return = ""
-                    to_return += "You hit the monster for {} damage \n".format(damage)
+                    to_return += "You hit the monster for {} damage \n".format(
+                        damage)
                     room_monster.take_damage(damage)
                     if room_monster.is_dead:
                         to_return += "You have killed the monster!"
@@ -107,3 +128,39 @@ class Player(object):
                 return "Woah, chill, the monster is already dead..."
         else:
             return "There is nothing to attack..."
+
+    def handle_loot(self, result, command, map_obj):
+        room_loot = map_obj.get_room(self.x, self.y).loot
+        if room_loot is None:
+            return "There is nothing to loot here..."
+        else:
+            if issubclass(room_loot.__class__, weapon.Weapon):
+                old = self.weapon
+                self.weapon = room_loot
+                map_obj.get_room(self.x, self.y).loot = old
+                return "You are now using a {}".format(self.weapon.name)
+            elif issubclass(room_loot.__class__, armor.Armor):
+                old = self.armor
+                self.armor = room_loot
+                map_obj.get_room(self.x, self.y).loot = old
+                return "You now have {} armor equiped".format(self.armor.name)
+
+    def handle_examine(self, result, command, map_obj):
+        # ["room", "weapon", "armor", "loot"]
+        if result is 0:  # Room
+            return "It's a {}".format(str(map_obj.get_room(self.x, self.y)).lower())
+        elif result is 1:  # Weapon
+            return "You have a {} in your hands. {}".format(self.weapon.name, self.weapon.description)
+        elif result is 2:  # Armor
+            return "You are wearing {} armor. {}".format(str(self.armor.name).lower(), self.armor.description)
+        elif result is 3:
+            room_loot = map_obj.get_room(self.x, self.y).loot
+            if room_loot is None:
+                return "There is no loot here..."
+            else:
+                if issubclass(room_loot.__class__, armor.Armor):
+                    return "There is {} armor on the ground".format(room_loot.name)
+                else:
+                    return "There is a {} on the floor".format(room_loot.name)
+        return "You look deeply into your soul, " \
+            + "but you can't seem to find anything..."
