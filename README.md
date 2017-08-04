@@ -41,7 +41,7 @@ This is a pretty long setup. Running a "Local setup" might be a pain, but here g
 1. Create a Web Source called `Monsters`
     1. Under site url, put `http://chisaipete.github.io/bestiary/`
     2. Under advanced settings, put `Maximum crawling depth` to `1`
-    3. Under Web Scraping, add the following config
+    3. Under Web Scraping, add the following [config](#web-crawler-config)
     4. After adding the config, save but don't rebuild
     5. Add all the extensions in the [Extensions](#extension-1-add-random) section to the source, there should be 3 total.
 2. Build the Web source and wait
