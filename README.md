@@ -43,7 +43,7 @@ This is a pretty long setup. Running a "Local setup" might be a pain, but here g
     2. Under advanced settings, put `Maximum crawling depth` to `1`
     3. Under Web Scraping, add the following config
     4. After adding the config, save but don't rebuild
-    5. Add all the extensions in the Setup files section to the source, there should be 3 total.
+    5. Add all the extensions in the [Extensions](#extension-1-add-random) section to the source, there should be 3 total.
 2. Build the Web source and wait
     1. There should be 51 valid monster in the source when it's done (Aug 4th, 2017)
 
