@@ -163,3 +163,9 @@ The game itself should take about 15 minutes to complete, maybe even less depend
     1. `pip install pyyaml`
     2. `pip install slackclient`
 3. A Coveo cloud V2 org
+
+## Sources used
+[https://www.fullstackpython.com/blog/build-first-slack-bot-python.html](https://www.fullstackpython.com/blog/build-first-slack-bot-python.html)
+
+## Authors
+Peter McCormick ([Malpp](https://github.com/Malpp))
