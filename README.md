@@ -1,4 +1,4 @@
-# Coveo Text Game
+# Text Game
 This is a text based game powered by a slack bot and the Coveo Cloud V2 platform
 
 ## Description
