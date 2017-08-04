@@ -101,4 +101,5 @@ This is a pretty long setup. Running a "Local setup" might be a pain, but here g
   }
 ]
 ```
+
     4. After adding the config, save but don't rebuild
