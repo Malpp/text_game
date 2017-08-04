@@ -28,7 +28,7 @@ This is a pretty long setup. Running a "Local setup" might be a pain, but here g
 3. Next we need to get the ID of the bot
     1. Go [here](https://www.fullstackpython.com/blog/build-first-slack-bot-python.html) and navigate to the `Obtaining Our Bot’s ID` section
     2. Change the line `os.environ.get('SLACK_BOT_TOKEN')` to just put your bot's token
-    3. Save the output for later
+    3. Run the script and save the output for later
 4. Now we need to setup the enviroment variables. This step maybe be different depending on how you run your script. Since I ran mine off VSCode, I'll do those steps
     1. Go to your `launch.json`
     2. Find the python instance type that you run, usually `Python`
@@ -42,7 +42,18 @@ This is a pretty long setup. Running a "Local setup" might be a pain, but here g
     1. Under site url, put `http://chisaipete.github.io/bestiary/`
     2. Under advanced settings, put `Maximum crawling depth` to `1`
     3. Under Web Scraping, add the following config
-```json
+    4. After adding the config, save but don't rebuild
+    5. Add all the extensions in the Setup files section to the source, there should be 3 total.
+2. Build the Web source and wait
+    1. There should be 51 valid monster in the source when it's done (Aug 4th, 2017)
+
+Done! I may have missed a step, as I did this README after completing this project...
+
+#### Setup files
+
+##### Web crawler config
+
+```javascript
 [
   {
     "for": {
@@ -102,4 +113,53 @@ This is a pretty long setup. Running a "Local setup" might be a pain, but here g
 ]
 ```
 
-    4. After adding the config, save but don't rebuild
+##### Extension 1: Add random
+Post-conversion
+
+```python
+from random import randint
+document.add_meta_data({
+    "magic": randint(1000000,10000000)
+})
+```
+
+##### Extension 2: Good Challenge
+Pre-conversion
+
+```python
+try:
+    hp = document.get_meta_data_value('challenge')[0]
+    hp = hp.split(' ')
+    if hp[0] == '0' or hp[0] == '1/8':
+        pass
+    else:
+        document_api.v1.reject()
+        
+except:
+    document_api.v1.reject()
+```
+
+##### Extension 3: No Hp
+Pre-conversion
+
+```python
+try:
+    hp = document.get_meta_data_value('hp')[0]
+    if hp == '':
+        document_api.v1.reject()
+except:
+    document_api.v1.reject()
+```
+
+## How to run
+Simply run the script, then scroll to the bottom of your user list of your slack team and click the add button.
+Search for your app and click on View. Then you can type `start game` to start a game.
+
+The game itself should take about 15 minutes to complete, maybe even less depending on luck.
+
+## Dependencies
+1. A slack team with a valid slack
+2. Python 2.7 with the following libraries
+    1. `pip install pyyaml`
+    2. `pip install slackclient`
+3. A Coveo cloud V2 org
