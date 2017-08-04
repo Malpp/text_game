@@ -40,7 +40,7 @@ def handle_command(command, channel, user):
     elif user in games:
         send_message(games[user].update(command), channel)
     else:
-        send_message("Please user the command `start game` to play", channel)
+        send_message("Please type the command `start game` to play", channel)
 
 
 def parse_slack_output(slack_rtm_output):
